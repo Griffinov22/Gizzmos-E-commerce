@@ -1,0 +1,205 @@
+:root {
+  --fs-lg: 1.5rem;
+  --fs-md: 1.1rem;
+  --fs-sm: 0.75rem;
+
+  --fw-bld: 800;
+  --fw-reg: 500;
+  --fw-thn: 400;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* BASE */
+p,
+label,
+input,
+button,
+a {
+  font-weight: var(--fw-reg);
+  font-size: var(--fs-md);
+  letter-spacing: 0.02em;
+  padding-block: 0.2rem;
+}
+
+input[type="text"]:focus-visible {
+  background-color: aliceblue;
+}
+
+label {
+  display: block;
+}
+
+input[type="submit"]:hover,
+button:hover {
+  cursor: pointer;
+}
+/* END BASE */
+
+/* helpers */
+.main-header {
+  text-align: center;
+  margin-top: 3rem;
+}
+/* end helpers */
+
+/* nav / header */
+.nav > ul {
+  display: flex;
+  list-style: none;
+  align-items: baseline;
+  padding: 1rem 1rem;
+  column-gap: 1.25rem;
+  background-color: lightgreen;
+}
+.nav > ul li:first-child {
+  margin-right: auto;
+}
+
+.name-link {
+  text-decoration: none;
+  color: black;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bld);
+}
+
+.float-link {
+  display: block;
+  text-decoration: none;
+  color: black;
+  font-size: var(--fs-md);
+  transition: all 200ms ease-in-out;
+}
+
+.float-link:hover {
+  -webkit-text-stroke: 0.5px black;
+}
+
+.admin-link {
+  padding: 0.2rem 0.6rem;
+  color: white;
+  background-color: rgb(91, 214, 255);
+  border-radius: 100vw;
+}
+.admin-link:hover {
+  -webkit-text-stroke: 0.5px white;
+}
+
+/* sign-up.php */
+.signup__form,
+.login__form {
+  max-width: 500px;
+  margin: 4rem auto;
+}
+.signup__set,
+.login__set {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+}
+.signup__set input {
+  width: 100%;
+}
+.signup__set div:nth-child(6) {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+.signup__set input[type="submit"] {
+  width: fit-content;
+}
+
+/* login.php */
+.login__set div:nth-child(4),
+.login__form div:nth-child(5) {
+  display: flex;
+  justify-content: center;
+  grid-column: span 2;
+}
+
+/* admin panel */
+.admin-grid {
+  display: grid;
+  max-width: 900px;
+  padding-inline: 2rem;
+  margin-inline: auto;
+  grid-template-columns: 1fr;
+  gap: 1rem 2rem;
+}
+
+@media all and (min-width: 650px) {
+  .admin-grid {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+.product__set {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.25rem;
+}
+
+.product__set input[type="text"],
+.product__set textarea {
+  width: 100%;
+}
+
+.product__currency-wrapper {
+  display: flex;
+  column-gap: 0.5rem;
+}
+.product__currency-wrapper input[type="number"] {
+  max-width: 125px;
+}
+
+.product__tray,
+.users__form {
+  position: relative;
+  border: 2px solid grey;
+  padding: 1rem 0.75rem;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.8rem 0.5rem;
+}
+
+.users__form {
+  margin-top: 0.5rem;
+  align-items: flex-start;
+}
+
+.product__tray::before,
+.users__form::before {
+  content: "Delete product on click";
+  display: block;
+  position: absolute;
+  top: -0.5rem;
+  left: 0.75rem;
+  padding-inline: 0.2rem;
+  background-color: white;
+}
+.users__form::before {
+  content: "Add/Remove/Modify User";
+}
+
+.product__tray-item {
+  position: relative;
+}
+.product__tray-item:hover::after {
+  content: "x";
+  position: relative;
+  display: inline-block;
+  aspect-ratio: 1/1;
+  width: 5px;
+  margin-block: auto;
+  padding-inline: 0.5rem 0.75rem;
+}
+
+.users__user {
+  flex-basis: 100%;
+}
