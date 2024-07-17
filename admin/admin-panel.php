@@ -134,6 +134,9 @@ if (!empty($_POST)) {
             const parsedId = parseInt(prodId, 10);
 
             if (!isNaN(parsedId)) {
+                const popup = document.createElement("div");
+                popup.classList.add("admin-popup");
+
                 const httpBody = new FormData();
                 httpBody.append("productId", parsedId);
 
@@ -145,12 +148,31 @@ if (!empty($_POST)) {
                     body: httpBody
                 });
 
+                let sucess = false;
                 if (!response.ok) {
-                    // error
+                    sucess = false;
+                } else {
+                    const result = await response.json();
+
+                    if (result.hasOwnProperty("success")) {
+                        el.remove();
+                        success = true;
+                    } else {
+                        success = false;
+                    }
                 }
 
-                const result = await response.json();
-                console.log(result);
+                const succMess = "Successfully deleted product";
+                const failMess = "Failed to delte product";
+                popup.innerHTML = `<p>${success ? succMess : failMess}</p>`;
+                popup.classList.add(success ? "success" : "fail");
+
+                document.body.insertAdjacentElement("beforeend", popup);
+                setTimeout(() => {
+                    // the animation is 3s long
+                    popup.remove();
+                }, 3000);
+
             }
 
         })

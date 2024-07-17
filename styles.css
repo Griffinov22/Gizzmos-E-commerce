@@ -203,3 +203,42 @@ button:hover {
 .users__user {
   flex-basis: 100%;
 }
+
+.admin-popup {
+  position: absolute;
+  right: 10%;
+  top: 100px;
+  width: 125px;
+  text-align: center;
+  padding: 0.25rem;
+  border-radius: 10px;
+  animation: fade-in-up 3s linear forwards;
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  10%,
+  90% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.admin-popup p {
+  font-weight: var(--fw-bld);
+}
+
+.admin-popup.success {
+  background-color: rgba(172, 255, 47, 0.85);
+}
+.admin-popup.fail {
+  background-color: rgba(178, 34, 34, 0.85);
+  color: whitesmoke;
+}

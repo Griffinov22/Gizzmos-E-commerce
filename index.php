@@ -20,12 +20,12 @@ if (!isset($_SESSION['loggedIn'])) {
     <?php include "./components/header.php"; ?>
     <main>
         <h1 class="main-header">Welcome to Gizzmos</h1>
-        <?php if (!$_SESSION["loggedIn"]): ?>
-        <p style="text-align:center; margin-top: 1rem;">Take a look at our products. Lots and lots of Gizzmos to view
-        </p>
-        <?php else: ?>
-        <p style="text-align:center; margin-top: 1rem;">Take a look around <?= $_SESSION['firstname'] ?>! We're glad
-            your here</p>
+        <?php if (!$_SESSION["loggedIn"]) : ?>
+            <p style="text-align:center; margin-top: 1rem;">Take a look at our products. Lots and lots of Gizzmos to view
+            </p>
+        <?php else : ?>
+            <p style="text-align:center; margin-top: 1rem;">Take a look around <?= $_SESSION['firstname'] ?>! We're glad
+                your here</p>
         <?php endif; ?>
     </main>
 
