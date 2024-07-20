@@ -43,8 +43,7 @@ if (!empty($_POST)) {
                         <legend>Add/Delete Products</legend>
                         <div>
                             <label>Name:</label>
-                            <input type="text" id="product-name" name="product-name" name="product-name"
-                                value="<?= $productName ?? "" ?>" required />
+                            <input type="text" id="product-name" name="product-name" name="product-name" value="<?= $productName ?? "" ?>" required />
                         </div>
                         <div>
                             <label>Description:</label>
@@ -54,8 +53,7 @@ if (!empty($_POST)) {
                             <label>Price:</label>
                             <div class="product__currency-wrapper">
                                 <p>$</p>
-                                <input type="number" name="product-price" min="0" value="<?= $productPrice ?? '' ?>"
-                                    required />
+                                <input type="number" name="product-price" min="0" value="<?= $productPrice ?? '' ?>" required />
                             </div>
                         </div>
                         <div>
@@ -64,15 +62,15 @@ if (!empty($_POST)) {
                         </div>
 
                         <?php if (!empty($productErrorMessage)) : ?>
-                        <div>
-                            <p style="color:red;"><?= $productErrorMessage ?></p>
-                        </div>
+                            <div>
+                                <p style="color:red;"><?= $productErrorMessage ?></p>
+                            </div>
                         <?php endif; ?>
 
                         <?php if (!empty($productSuccessMessage)) : ?>
-                        <div>
-                            <p style="color:green;"><?= $productErrorMessage ?></p>
-                        </div>
+                            <div>
+                                <p style="color:green;"><?= $productErrorMessage ?></p>
+                            </div>
                         <?php endif; ?>
 
                         <div>
@@ -87,9 +85,9 @@ if (!empty($_POST)) {
                     foreach ($products as $product) :
                     ?>
 
-                    <button class="product__tray-item" data-productid="<?= $product['ProductId'] ?>">
-                        <?= $product['Name'] ?>
-                    </button>
+                        <button class="product__tray-item" data-productid="<?= $product['ProductId'] ?>">
+                            <?= $product['Name'] ?>
+                        </button>
 
                     <?php endforeach; ?>
                 </div>
@@ -97,86 +95,129 @@ if (!empty($_POST)) {
 
             <!-- Admin Form -->
             <div class="users__form">
-                <button class="users__user" data-customerid="1234">Griffin Overmyer</button>
+                <?php
+                $users = $db->query("SELECT FirstName, LastName, Username, IsAdmin, UserId FROM Users")->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach ($users as $user) :
+                ?>
+                    <button class="users__user <?= $user["IsAdmin"] ? "admin" : '' ?>" data-userid="<?= $user["UserId"] ?>" style="order:<?= strtolower($user["Username"]) == strtolower($_SESSION["username"]) ? 0 : 1 ?>" <?= $user["IsAdmin"] ? "disabled" : "" ?>>
+                        <?= $user["FirstName"] . " " . $user["LastName"] ?>
+                        <br />
+                        (<?= $user["Username"] ?>)
+                    </button>
+
+                <?php endforeach; ?>
             </div>
 
         </div>
     </main>
 
     <script type="text/javascript">
-    document.querySelector("#product-name").focus();
+        document.querySelector("#product-name").focus();
 
-    const users = document.querySelectorAll(".users__user");
-    users.forEach(el => {
-        el.addEventListener("click", (e) => {
-            const customerId = e.target.dataset.customerid;
-            const parsedId = parseInt(customerId, 10);
+        const users = document.querySelectorAll(".users__user");
+        users.forEach(el => {
+            el.addEventListener("click", async (e) => {
+                const userId = e.target.dataset.userid;
+                const parsedId = parseInt(userId, 10);
 
-            if (!isNaN(parsedId)) {
+                if (!isNaN(parsedId)) {
+                    const popup = document.createElement("div");
+                    popup.classList.add("admin-popup");
 
-                const httpBody = new FormData();
-                httpBody.append("customerId", parsedId);
+                    const httpBody = new FormData();
+                    httpBody.append("userId", parsedId);
 
-                fetch(window.location.href, {
-                    method: "POST",
-                    body: httpBody
-                });
-            }
+                    const delEndpoint =
+                        `${window.location.protocol}//${window.location.host}/admin/deleteUser.php`;
 
-        });
-    });
+                    const response = await fetch(delEndpoint, {
+                        method: "POST",
+                        body: httpBody
+                    });
 
-    const products = document.querySelectorAll(".product__tray-item");
-    products.forEach((el) => {
-        el.addEventListener("click", async (e) => {
-
-            const prodId = e.target.dataset.productid;
-            const parsedId = parseInt(prodId, 10);
-
-            if (!isNaN(parsedId)) {
-                const popup = document.createElement("div");
-                popup.classList.add("admin-popup");
-
-                const httpBody = new FormData();
-                httpBody.append("productId", parsedId);
-
-                const del =
-                    `${window.location.protocol}//${window.location.host}/admin/deleteProduct.php`;
-
-                const response = await fetch(del, {
-                    method: "POST",
-                    body: httpBody
-                });
-
-                let sucess = false;
-                if (!response.ok) {
-                    sucess = false;
-                } else {
-                    const result = await response.json();
-
-                    if (result.hasOwnProperty("success")) {
-                        el.remove();
-                        success = true;
-                    } else {
+                    let success = false;
+                    if (!response.ok) {
                         success = false;
+                    } else {
+                        const result = await response.json();
+
+                        if (result.hasOwnProperty("success")) {
+                            el.remove();
+                            success = true;
+                        } else {
+                            success = false;
+                        }
                     }
+
+                    const succMess = "Successfully deleted user";
+                    const failMess = "Failed to delete user";
+                    popup.innerHTML = `<p>${success ? succMess : failMess}</p>`;
+                    popup.classList.add(success ? "success" : "fail");
+
+                    document.body.insertAdjacentElement("beforeend", popup);
+                    setTimeout(() => {
+                        // the animation is 3s long
+                        popup.remove();
+                    }, 3000);
+
+
                 }
 
-                const succMess = "Successfully deleted product";
-                const failMess = "Failed to delte product";
-                popup.innerHTML = `<p>${success ? succMess : failMess}</p>`;
-                popup.classList.add(success ? "success" : "fail");
+            });
+        });
 
-                document.body.insertAdjacentElement("beforeend", popup);
-                setTimeout(() => {
-                    // the animation is 3s long
-                    popup.remove();
-                }, 3000);
+        const products = document.querySelectorAll(".product__tray-item");
+        products.forEach((el) => {
+            el.addEventListener("click", async (e) => {
 
-            }
+                const prodId = e.target.dataset.productid;
+                const parsedId = parseInt(prodId, 10);
 
+                if (!isNaN(parsedId)) {
+                    const popup = document.createElement("div");
+                    popup.classList.add("admin-popup");
+
+                    const httpBody = new FormData();
+                    httpBody.append("productId", parsedId);
+
+                    const delEndpoint =
+                        `${window.location.protocol}//${window.location.host}/admin/deleteProduct.php`;
+
+                    const response = await fetch(delEndpoint, {
+                        method: "POST",
+                        body: httpBody
+                    });
+
+                    let sucess = false;
+                    if (!response.ok) {
+                        sucess = false;
+                    } else {
+                        const result = await response.json();
+
+                        if (result.hasOwnProperty("success")) {
+                            el.remove();
+                            success = true;
+                        } else {
+                            success = false;
+                        }
+                    }
+
+                    const succMess = "Successfully deleted product";
+                    const failMess = "Failed to delete product";
+                    popup.innerHTML = `<p>${success ? succMess : failMess}</p>`;
+                    popup.classList.add(success ? "success" : "fail");
+
+                    document.body.insertAdjacentElement("beforeend", popup);
+                    setTimeout(() => {
+                        // the animation is 3s long
+                        popup.remove();
+                    }, 3000);
+
+                }
+
+            })
         })
-    })
     </script>
 </body>
 

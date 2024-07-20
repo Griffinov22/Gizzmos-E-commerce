@@ -157,8 +157,7 @@ button:hover {
   max-width: 125px;
 }
 
-.product__tray,
-.users__form {
+.product__tray {
   position: relative;
   border: 2px solid grey;
   padding: 1rem 0.75rem;
@@ -169,8 +168,14 @@ button:hover {
 }
 
 .users__form {
+  position: relative;
+  border: 2px solid grey;
+  padding: 1rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem 0.5rem;
   margin-top: 0.5rem;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .product__tray::before,
@@ -187,6 +192,16 @@ button:hover {
   content: "Add/Remove/Modify User";
 }
 
+.users__user.admin {
+  background-color: rgba(102, 51, 153, 0.3);
+}
+
+.users__user.admin:disabled {
+  cursor: not-allowed;
+  color: inherit;
+  border-color: inherit;
+}
+
 .product__tray-item {
   position: relative;
 }
@@ -198,10 +213,6 @@ button:hover {
   width: 5px;
   margin-block: auto;
   padding-inline: 0.5rem 0.75rem;
-}
-
-.users__user {
-  flex-basis: 100%;
 }
 
 .admin-popup {
