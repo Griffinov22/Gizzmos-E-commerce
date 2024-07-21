@@ -1,4 +1,5 @@
-<?php var_dump($_SESSION); ?>
+<!-- Testing -->
+<!-- <?php var_dump($_SESSION); ?> -->
 <header>
     <nav class="nav">
         <ul>
