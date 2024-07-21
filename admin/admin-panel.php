@@ -188,7 +188,7 @@ if (!empty($_POST)) {
                     });
 
                     let sucess = false;
-                    if (!response.ok) {
+                    if (response.ok) {
                         const result = await response.json();
 
                         if (result.hasOwnProperty("success")) {
