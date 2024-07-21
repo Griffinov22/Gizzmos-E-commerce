@@ -137,9 +137,7 @@ if (!empty($_POST)) {
                     });
 
                     let success = false;
-                    if (!response.ok) {
-                        success = false;
-                    } else {
+                    if (response.ok) {
                         const result = await response.json();
 
                         if (result.hasOwnProperty("success")) {
@@ -191,8 +189,6 @@ if (!empty($_POST)) {
 
                     let sucess = false;
                     if (!response.ok) {
-                        sucess = false;
-                    } else {
                         const result = await response.json();
 
                         if (result.hasOwnProperty("success")) {

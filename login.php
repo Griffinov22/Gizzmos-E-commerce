@@ -12,7 +12,7 @@ if (!empty($_POST)) {
 
     if (!empty($_SESSION['username']) && !empty($password)) {
         try {
-            $query = $db->prepare("SELECT Firstname, Lastname, Password, IsAdmin FROM Users WHERE Username = ?");
+            $query = $db->prepare("SELECT Firstname, Lastname, Password, IsAdmin, UserId FROM Users WHERE Username = ?");
             $query->execute([$_SESSION["username"]]);
             $res = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -21,6 +21,7 @@ if (!empty($_POST)) {
                 $_SESSION['firstname'] = $res['Firstname'];
                 $_SESSION['lastname'] = $res['Lastname'];
                 $_SESSION['isAdmin'] = (bool)$res['IsAdmin'];
+                $_SESSION['userId'] = $res['UserId'];
                 //redirect to home screen
                 header('Location:index.php');
                 exit();
@@ -56,17 +57,16 @@ if (!empty($_POST)) {
                 <legend>Sign Up</legend>
                 <div>
                     <label>Username:</label>
-                    <input type="text" id="username" name="username" name="lastname"
-                        value="<?= $_SESSION["username"] ?? "" ?>" />
+                    <input type="text" id="username" name="username" name="lastname" value="<?= $_SESSION["username"] ?? "" ?>" />
                 </div>
                 <div>
                     <label>Password:</label>
                     <input type="password" name="password" name="lastname" value="<?= $_SESSION["password"] ?? "" ?>" />
                 </div>
                 <?php if (!empty($errorMessage)) : ?>
-                <div>
-                    <p style="color:red;"><?= $errorMessage ?></p>
-                </div>
+                    <div>
+                        <p style="color:red;"><?= $errorMessage ?></p>
+                    </div>
                 <?php endif; ?>
                 <div>
                     <input type="submit" value="submit" />
@@ -76,7 +76,7 @@ if (!empty($_POST)) {
     </main>
 
     <script type="text/javascript">
-    document.querySelector("#username").focus();
+        document.querySelector("#username").focus();
     </script>
 </body>
 

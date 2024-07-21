@@ -17,18 +17,23 @@ if (!empty($_POST)) {
     if (!empty($_SESSION['firstname']) && !empty($_SESSION['lastname']) && !empty($_SESSION['username']) && !empty($password)) {
         try {
             $query = $db->prepare("INSERT INTO Users (Firstname, Lastname, Username, Password) VALUES (?,?,?,?)");
-            $res = $query->execute([$_SESSION['firstname'], $_SESSION['lastname'], $_SESSION['username'], password_hash($password, PASSWORD_DEFAULT)]);
-        } catch (Exception $e) {
-            $errorMessage = "error connecting to database. Try again later";
-        }
+            $resInsert = $query->execute([$_SESSION['firstname'], $_SESSION['lastname'], $_SESSION['username'], password_hash($password, PASSWORD_DEFAULT)]);
 
-        if (isset($res)) {
+            //get userId
+            $idQuery = $db->prepare("SELECT UserId FROM Users WHERE Username = ?");
+            
+            $idQuery->execute([$_SESSION['username']]);
+            $idRes = $idQuery->fetch(PDO::FETCH_ASSOC);
+
             $_SESSION['loggedIn'] = true;
+            $_SESSION['userId'] = $idRes['UserId'];
             //redirect to home screen
             header('Location:index.php');
             exit();
-        } else {
-            $errorMessage = "error inserting data into database. Try again later";
+            
+        } catch (Exception $e) {
+            $errCode = $e->getCode();
+            $errorMessage = $errCode == "23000" ? "Username {$_SESSION['username']} is already taken" : "error connecting to database";
         }
     } else {
         $errorMessage = "All fields are required";
@@ -74,16 +79,16 @@ if (!empty($_POST)) {
                     <input type="submit" value="submit" />
                 </div>
                 <?php if (!empty($errorMessage)) : ?>
-                <div>
-                    <p style="color:red;"><?= $errorMessage ?></p>
-                </div>
+                    <div>
+                        <p style="color:red;"><?= $errorMessage ?></p>
+                    </div>
                 <?php endif; ?>
             </fieldset>
         </form>
     </main>
 
     <script type="text/javascript">
-    document.querySelector("#firstname").focus();
+        document.querySelector("#firstname").focus();
     </script>
 </body>
 
