@@ -19,8 +19,41 @@ if (!$_SESSION['loggedIn']) {
 
 <body>
     <?php include "./components/header.php" ?>
-    <h1 class="main-header">All Gizzmos, Gadgets, and Thingimabobs sold from a small company
-    </h1>
+    <h1 class="main-header">All Gizzmos, Gadgets, and Thingimabobs</h1>
+    <p class="text-center">From a small, local company 👍</p>
+    <div class="gad__grid">
+        <div class="gad__item">
+            <img class="gad__img" src="./data/bread.jpg" alt="" />
+            <div class="gad__content">
+                <h3 class="gad__title">Bread Basket</h3>
+                <div class="gad__flex">
+                    <p class="gad__desc">This bread was baked 9 years ago, but it has enough preservatives to keep it alive for another 9 more!</p>
+                    <p class="gad__price"><span>$</span>8.00</p>
+                </div>
+            </div>
+        </div>
+        <div class="gad__item">
+            <img class="gad__img" src="./data/funny-dog.jpg" alt="" />
+            <div class="gad__content">
+                <h3 class="gad__title">Funny Glasses</h3>
+                <div class="gad__flex">
+                    <p class="gad__desc">These glasses make you cool outside, but most definitely not inside.</p>
+                    <p class="gad__price"><span>$</span>12.00</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="gad__item">
+            <img class="gad__img" src="./data/storm-trooper.jpg" alt="" />
+            <div class="gad__content">
+                <h3 class="gad__title">Lego Storm Trooper</h3>
+                <div class="gad__flex">
+                    <p class="gad__desc">This lego figurine will defend you till the end of time, or until it melts in your car on a sunny day.</p>
+                    <p class="gad__price"><span>$</span>2.00</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
