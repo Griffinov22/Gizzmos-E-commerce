@@ -12,6 +12,8 @@ session_start();
     <title>Description - NAMEOFITEM</title>
 </head>
 <body>
-    <h1>Description page</h1>
+<?php include "./components/header.php" ?>
+    <h1 class="main-header">Description of Item</h1>
+    <p class="text-center">👍</p>
 </body>
 </html>

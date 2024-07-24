@@ -5,6 +5,7 @@ if (!$_SESSION['loggedIn']) {
     exit();
 }
 
+    include "./conn/openDb.php";
 ?>
 
 <!DOCTYPE html>
@@ -21,46 +22,30 @@ if (!$_SESSION['loggedIn']) {
     <?php include "./components/header.php" ?>
     <h1 class="main-header">All Gizzmos, Gadgets, and Thingimabobs</h1>
     <p class="text-center">From a small, local company 👍</p>
+
     <ul class="gad__grid">
-        <li class="gad__item">
-            <a href="#">
-                <img class="gad__img" src="./data/bread.jpg" alt="" />
-                <div class="gad__content">
-                    <h3 class="gad__title">Bread Basket</h3>
-                    <div class="gad__flex">
-                        <p class="gad__desc">This bread was baked 9 years ago, but it has enough preservatives to keep it alive for another 9 more!</p>
-                        <p class="gad__price"><span>$</span>8.00</p>
-                    </div>
-                </div>
-            </a>
-        </li>
 
-        <li class="gad__item">
-            <a href="#">
-                <img class="gad__img" src="./data/funny-dog.jpg" alt="" />
-                <div class="gad__content">
-                    <h3 class="gad__title">Funny Glasses</h3>
-                    <div class="gad__flex">
-                        <p class="gad__desc">These glasses make you cool outside, but most definitely not inside.</p>
-                        <p class="gad__price"><span>$</span>12.00</p>
-                    </div>
-                </div>
-            </a>
-        </li>
+        <?php
+        $products = $db->query("SELECT * FROM Products")->fetchAll();
 
-        <li class="gad__item">
-            <a href="#">
-                <img class="gad__img" src="./data/storm-trooper.jpg" alt="" />
-                <div class="gad__content">
-                    <h3 class="gad__title">Lego Storm Trooper</h3>
-                    <div class="gad__flex">
-                        <p class="gad__desc">This lego figurine will defend you till the end of time, or until it melts in your car on a sunny day.</p>
-                        <p class="gad__price"><span>$</span>2.00</p>
+        foreach ($products as $prod):
+            
+        ?>
+            <li class="gad__item">
+                <a href="description.php">
+                    <img class="gad__img" src="./images/default-image.jpg" alt="" />
+                    <div class="gad__content">
+                        <h3 class="gad__title"><?= $prod['Name'] ?></h3>
+                        <div class="gad__flex">
+                            <p class="gad__desc"><?= $prod['Description'] ?>
+                        </p>
+                            <p class="gad__price"><span>$</span><?= $prod['Price'] ?></p>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </li>
-        
+                </a>
+            </li>
+        <?php endforeach; ?>
+
     </ul>
 </body>
 
