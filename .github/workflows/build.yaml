@@ -23,26 +23,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: Debug SSH Agent
-        run: |
-          echo $SSH_AUTH_SOCK
-          ssh-add -l
-      - name: Set up SSH
-        run: |
-          echo "${{ secrets.ON_PREM_PRIVATE_SSH_KEY }}" > private_key
-          chmod 600 private_key
-          mkdir -p ~/.ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          eval $"(ssh-agent -s)"
-          ssh-add private_key
-
       # Runs a single command using the runners shell
       - name: Deploy to On-Premises Server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
-          key: private_key
+          ssh-private-key: private_key
           script: |
             cd ../../var/www/Gizzmos/
             git pull git@github.com:Griffinov22/Gizzmos-E-commerce.git main
