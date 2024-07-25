@@ -22,6 +22,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+
+      - name: Debug SSH Agent
+        run: |
+          echo $SSH_AUTH_SOCK
+          ssh-add -l
       - name: Set up SSH
         run: |
           echo "${{ secrets.ON_PREM_PRIVATE_SSH_KEY }}" > private_key
