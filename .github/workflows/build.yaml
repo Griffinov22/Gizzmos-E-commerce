@@ -28,6 +28,7 @@ jobs:
           chmod 600 private_key
           mkdir -p ~/.ssh
           ssh-keyscan github.com >> ~/.ssh/known_hosts
+          eval $"(ssh-agent -s)"
           ssh-add private_key
 
       # Runs a single command using the runners shell
