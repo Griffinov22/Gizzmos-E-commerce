@@ -15,11 +15,20 @@ if (!empty($prodName) || !empty($prodDesc) || !empty($prodPrice)) {
 
     if ($hasImage){
         include_once "../logic/Guid.php";
+
+        // test
+        $test_file = '/var/www/GizzmosImages/test.txt';
+        if (file_put_contents($test_file, 'Test') === false) {
+            echo 'Failed to write to the target directory.';
+        } else {
+            echo 'Successfully wrote to the target directory.';
+        }
+        //end-test
         
         $imageName = $_FILES['productImage']['name'];
         $imageIdentifier = NewGuid();
         $imageExt = explode(".", $imageName)[1];
-        $path = "/home/griffinov/GizzmosImages/$imageIdentifier.$imageExt";
+        $path = "/var/www/GizzmosImages/$imageIdentifier.$imageExt";
         $filesystemSuccess = move_uploaded_file($_FILES['productImage']['tmp_name'], $path);
 
         if ($filesystemSuccess) {
@@ -30,6 +39,8 @@ if (!empty($prodName) || !empty($prodDesc) || !empty($prodPrice)) {
             } catch (Exception $e) {
                 throw new ErrorException("Couldn't insert image into database. Error: " . $e->getMessage());
             }
+        } else {
+            $errorMessage = "error uploading image to database.";
         }
     }
 

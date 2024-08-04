@@ -6,6 +6,7 @@ if (!$_SESSION['loggedIn']) {
 }
 
     include "./conn/openDb.php";
+    include "./logic/EchoImage.php";
 ?>
 
 <!DOCTYPE html>
@@ -26,14 +27,18 @@ if (!$_SESSION['loggedIn']) {
     <ul class="gad__grid">
 
         <?php
-        $products = $db->query("SELECT * FROM Products")->fetchAll();
+        $products = $db->query("SELECT Products.Name,Products.ImageId,Products.Description,Products.Price,Images.Path FROM Products LEFT JOIN Images ON Products.ImageId = Images.ImageId")->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($products as $prod):
-            
+            $imageExists = false;
+
+            if ($prod['Path'] && file_exists($prod['Path']) && is_readable($prod['Path']) && exif_imagetype($prod['Path'])) {
+                $imageExists = true;
+            }
         ?>
             <li class="gad__item">
                 <a href="description.php">
-                    <img class="gad__img" src="./images/default-image.jpg" alt="" />
+                    <img class="gad__img" src="<?= $imageExists ? EchoImage($prod['Path']) : './images/default-image.jpg' ?>" alt="" />
                     <div class="gad__content">
                         <h3 class="gad__title"><?= $prod['Name'] ?></h3>
                         <div class="gad__flex">

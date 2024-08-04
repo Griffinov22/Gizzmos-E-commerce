@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 include "../conn/openDb.php";
 
@@ -53,7 +54,7 @@ if (!empty($_POST)) {
                             <label>Price:</label>
                             <div class="product__currency-wrapper">
                                 <p>$</p>
-                                <input type="number" name="product-price" min="0" value="<?= $productPrice ?? '' ?>" required />
+                                <input type="number" name="product-price" min="0" step='0.01' value="<?= $productPrice ?? '' ?>" required />
                             </div>
                         </div>
                         <div>
