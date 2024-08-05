@@ -387,7 +387,64 @@ button:hover {
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.gad__price {
+.gad__price,
+.prodcard__price {
   font-size: var(--fs-lg);
   font-weight: var(--fw-bld);
+  padding-block: 0.25rem;
+}
+
+/* description.php */
+
+@media (max-width: 600px) {
+  .prodcard {
+    flex-direction: column;
+  }
+
+  .prodcard__content {
+    /* place second */
+    order: 1;
+  }
+}
+
+.prodcard {
+  max-width: 800px;
+  max-height: 800px;
+  margin-inline: auto;
+  display: flex;
+  justify-content: stretch;
+  column-gap: 3rem;
+  margin-top: 5rem;
+  padding-inline: 1rem;
+}
+
+.prodcard__content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.prodcard__title {
+  padding-bottom: 0.75rem;
+}
+.prodcard__price {
+  margin-left: auto;
+}
+.prodcard__cartbtn {
+  width: max-content;
+  margin-left: auto;
+}
+
+@media (min-width: 600px) {
+  .prodcard__cartbtn {
+    margin: auto 1rem 1rem auto;
+  }
+}
+
+.prodcard__img {
+  flex-grow: 1;
+  max-width: 100%;
+  object-fit: cover;
+  height: 350px;
+  border-radius: 10px;
+  border: 2px solid black;
 }
