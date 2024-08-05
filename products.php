@@ -27,7 +27,7 @@ if (!$_SESSION['loggedIn']) {
     <ul class="gad__grid">
 
         <?php
-        $products = $db->query("SELECT Products.Name,Products.ImageId,Products.Description,Products.Price,Images.Path FROM Products LEFT JOIN Images ON Products.ImageId = Images.ImageId")->fetchAll(PDO::FETCH_ASSOC);
+        $products = $db->query("SELECT Products.ProductId,Products.Name,Products.ImageId,Products.Description,Products.Price,Images.Path FROM Products LEFT JOIN Images ON Products.ImageId = Images.ImageId")->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($products as $prod):
             $imageExists = false;
@@ -37,8 +37,8 @@ if (!$_SESSION['loggedIn']) {
             }
         ?>
             <li class="gad__item">
-                <a href="description.php">
-                    <img class="gad__img" src="<?= $imageExists ? EchoImage($prod['Path']) : './images/default-image.jpg' ?>" alt="" />
+                <a href="description.php?prodId=<?= $prod['ProductId'] ?>">
+                    <img class="gad__img" src="<?= $imageExists ? EchoImage($prod['Path']) : './images/default-image.jpg' ?>" alt="<?= $prod['Name'] ?>" />
                     <div class="gad__content">
                         <h3 class="gad__title"><?= $prod['Name'] ?></h3>
                         <div class="gad__flex">
