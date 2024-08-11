@@ -16,17 +16,20 @@ if (!empty($_POST)) {
 
     if (!empty($_SESSION['firstname']) && !empty($_SESSION['lastname']) && !empty($_SESSION['username']) && !empty($password)) {
         try {
+            // this creates a cart record with userId foreign key
             $query = $db->prepare("INSERT INTO Users (Firstname, Lastname, Username, Password) VALUES (?,?,?,?)");
             $resInsert = $query->execute([$_SESSION['firstname'], $_SESSION['lastname'], $_SESSION['username'], password_hash($password, PASSWORD_DEFAULT)]);
 
             //get userId
-            $idQuery = $db->prepare("SELECT UserId FROM Users WHERE Username = ?");
+            $idQuery = $db->prepare("SELECT Users.UserId, Carts.Products FROM Users JOIN Carts ON Users.UserId = Carts.UserId WHERE Username = ?");
             
             $idQuery->execute([$_SESSION['username']]);
-            $idRes = $idQuery->fetch(PDO::FETCH_ASSOC);
+            $res = $idQuery->fetch(PDO::FETCH_ASSOC);
 
             $_SESSION['loggedIn'] = true;
-            $_SESSION['userId'] = $idRes['UserId'];
+            $_SESSION['userId'] = $res['UserId'];
+            // should be an empty array
+            $_SESSION['products'] = json_decode($res['Products']);
             //redirect to home screen
             header('Location:index.php');
             exit();

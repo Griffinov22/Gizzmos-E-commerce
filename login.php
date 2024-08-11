@@ -1,18 +1,19 @@
 <?php
+require_once "./models/product.php";
 session_start();
 
 $errorMessage = '';
 
 // attempts login
 if (!empty($_POST)) {
-    // add security
+
     include "./conn/openDb.php";
     $_SESSION['username'] = $_POST['username'];
     $password = $_POST['password'];
 
     if (!empty($_SESSION['username']) && !empty($password)) {
         try {
-            $query = $db->prepare("SELECT Firstname, Lastname, Password, IsAdmin, UserId FROM Users WHERE Username = ?");
+            $query = $db->prepare("SELECT Users.Firstname, Users.Lastname, Users.Password, Users.IsAdmin, Users.UserId, Carts.Products FROM Users JOIN Carts ON Users.UserId = Carts.UserId WHERE Username = ?");
             $query->execute([$_SESSION["username"]]);
             $res = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -22,6 +23,14 @@ if (!empty($_POST)) {
                 $_SESSION['lastname'] = $res['Lastname'];
                 $_SESSION['isAdmin'] = (bool)$res['IsAdmin'];
                 $_SESSION['userId'] = $res['UserId'];
+                $_SESSION['products'] = [];
+
+                $decodedProducts = json_decode($res['Products']);
+                foreach($decodedProducts as $prod) {
+                    $prodClass = unserialize($prod);
+                    array_push($_SESSION['products'], $prodClass);
+                }
+                
                 //redirect to home screen
                 header('Location:index.php');
                 exit();

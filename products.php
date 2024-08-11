@@ -1,5 +1,7 @@
 <?php
+require_once './models/product.php';
 session_start();
+
 if (!$_SESSION['loggedIn']) {
     header("Location: index.php");
     exit();
