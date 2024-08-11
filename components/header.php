@@ -2,8 +2,17 @@
 <!-- <?php var_dump($_SESSION); ?> -->
 
 <?php
-// works for one folder (admin)
+
 $inFolder = substr_count($_SERVER['REQUEST_URI'], '/') == 2;
+
+$cartCount = 0;
+
+if ($_SESSION['loggedIn']) {
+
+    foreach($_SESSION['products'] as $headerProd) {
+        $cartCount += $headerProd->amount;
+    }
+}
 
 ?>
 
@@ -16,11 +25,12 @@ $inFolder = substr_count($_SERVER['REQUEST_URI'], '/') == 2;
             <li><a href="<?= $inFolder ? '../' : '' ?>sign-up.php" class="float-link signup-link">Sign Up</a></li>
             <?php else : ?>
 
-            <?php if ($_SESSION['isAdmin']) : ?>
-            <li><a href="<?= $inFolder ? '' : './admin/' ?>admin-panel.php" class="float-link admin-link">Admin</a></li>
-            <?php endif; ?>
+                <?php if ($_SESSION['isAdmin']) : ?>
+                <li><a href="<?= $inFolder ? '' : './admin/' ?>admin-panel.php" class="float-link admin-link">Admin</a></li>
+                <?php endif; ?>
 
             <li><a href="<?= $inFolder ? '../' : '' ?>products.php" class="float-link prod-link">Products</a></li>
+            <li><a href="<?= $inFolder ? '../' : '' ?>cart.php" class="float-link prod-link">Cart (<?= $cartCount ?>)</a></li>
             <li>
                 <p><?= $_SESSION["username"]; ?></p>
             </li>
