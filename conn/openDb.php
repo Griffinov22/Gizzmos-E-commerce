@@ -1,6 +1,12 @@
 <?php
 
-require_once './vendor/autoload.php';
+$inFolder = substr_count($_SERVER['REQUEST_URI'], '/') == 2;
+$prefix = ".";
+if ($inFolder) {
+    $prefix = "..";
+}
+
+require_once "$prefix/vendor/autoload.php";
 // do not use the .env.example
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, $levels = 1), ".env");
 $dotenv->safeLoad();
