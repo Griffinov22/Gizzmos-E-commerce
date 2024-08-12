@@ -31,5 +31,5 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.ON_PREM_PRIVATE_SSH_KEY }}
           script: |
-            cd ../../var/www/Gizzmos/
+            cd /var/www/Gizzmos/
             git pull git@github.com:Griffinov22/Gizzmos-E-commerce.git main
