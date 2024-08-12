@@ -7,6 +7,11 @@ if (!$_SESSION['loggedIn']) {
     exit();
 }
 
+if (!isset($_SESSION['csrf_token'])) {
+    header('Location: index.php');
+    exit();
+}
+
 include './conn/openDb.php';
 include './logic/EchoImage.php';
 
@@ -32,11 +37,11 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Cart - <?= $_SESSION['username'] ?></title>
+    <title>Cart - <?= htmlspecialchars($_SESSION['username']) ?></title>
 </head>
 <body>
 <?php include "./components/header.php" ?>
-    <h1 class="main-header"><?= $_SESSION['username'] ?>'s Cart</h1>
+    <h1 class="main-header"><?= htmlspecialchars($_SESSION['username']) ?>'s Cart</h1>
 
     <?php if (!$cartEmpty): ?>
         <div class="cart-grid">
@@ -61,12 +66,12 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
                     <img src="<?= $imageExists ? EchoImage($prod['Path']) : './images/default-image.jpg' ?>" alt="<?= $prod['Name'] ?>" />
 
                     <div class="cart-grid__item-content">
-                        <h2><?= $prod['Name'] ?></h2>
-                        <p><?= $prod['Description'] ?></p>
+                        <h2><?= htmlspecialchars($prod['Name']) ?></h2>
+                        <p><?= htmlspecialchars($prod['Description']) ?></p>
                         <div class="cart-grid__item-flex">
                             <div>
                                 <p>Amount:</p>
-                                <select data-iniAmount="<?= $prodAmount ?>" data-prodId="<?= $prod['ProductId'] ?>" class="cart-select">
+                                <select data-iniAmount="<?= $prodAmount ?>" data-prodId="<?= htmlspecialchars($prod['ProductId']) ?>" class="cart-select">
                                     <?php 
                                 for ($i=1; $i<6; $i++): 
                                     $isSelected = $prodAmount == $i
@@ -76,9 +81,9 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
                                 </select>
                             </div>
                                 
-                            <p class="cart-grid__item-price">$<?= $prod['Price'] ?></p>
+                            <p class="cart-grid__item-price">$<?= htmlspecialchars($prod['Price']) ?></p>
                         </div>
-                        <button class="cart-grid__item-deletebtn" data-prodId="<?= $prod['ProductId'] ?>" title="remove item from cart">
+                        <button class="cart-grid__item-deletebtn" data-prodId="<?= htmlspecialchars($prod['ProductId']) ?>" title="remove item from cart">
                         <svg id="Icons" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm4.707,14.293a1,1,0,1,1-1.414,1.414L12,13.414,8.707,16.707a1,1,0,1,1-1.414-1.414L10.586,12,7.293,8.707A1,1,0,1,1,8.707,7.293L12,10.586l3.293-3.293a1,1,0,1,1,1.414,1.414L13.414,12Z"/></svg>
                         </button>
                     </div>
@@ -88,7 +93,7 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
 
         <div class="checkout-wrapper">
             <h3 class="text-center">Ready to checkout?</h3>
-            <a href="./logic/clearCart.php" class="checkout__btn text-center">
+            <a href="./logic/clearCart.php?csrf_token=<?= $_SESSION['csrf_token'] ?>" class="checkout__btn text-center">
                 <p>Checkout</p>
                 <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><rect fill="none" height="256" width="256"/><path d="M223.9,65.4l-12.2,66.9A24,24,0,0,1,188.1,152H72.1l4.4,24H184a24,24,0,1,1-24,24,23.6,23.6,0,0,1,1.4-8H102.6a23.6,23.6,0,0,1,1.4,8,24,24,0,1,1-42.2-15.6L34.1,32H16a8,8,0,0,1,0-16H34.1A16,16,0,0,1,49.8,29.1L54.7,56H216a7.9,7.9,0,0,1,6.1,2.9A7.7,7.7,0,0,1,223.9,65.4Z"/></svg>
             </a>
@@ -110,6 +115,7 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
             el.addEventListener('change', (e) => {
                 const targetAmount = parseInt(e.currentTarget.value);
                 const productId = parseInt(e.currentTarget.dataset['prodid']);
+                const csrfToken = '<?= $_SESSION['csrf_token'] ?>';
                 // const startAmount = e.target.dataset['iniamount'];
                 if (isNaN(targetAmount) || isNaN(productId)) return;
 
@@ -120,7 +126,8 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
                     },
                     body: JSON.stringify({
                         targetAmount,
-                        productId
+                        productId,
+                        'csrf_token': csrfToken
                     })
                 })
                 .then(res => {
@@ -141,6 +148,7 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
         deleteBtn.forEach(el => {
             el.addEventListener('click', (e) => {
                 const productId = parseInt(e.currentTarget.dataset['prodid']);
+                const csrfToken = '<?= $_SESSION['csrf_token'] ?>';
                 if (isNaN(productId)) return;
 
                 fetch('/logic/removeItem.php', {
@@ -149,7 +157,8 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        productId
+                        productId,
+                        "csrf_token": csrfToken
                     })
                 })
                 .then(res => {

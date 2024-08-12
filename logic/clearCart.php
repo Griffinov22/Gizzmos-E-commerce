@@ -6,7 +6,8 @@ include '../conn/openDb.php';
 if (!$_SESSION['loggedIn'] ||
  sizeof($_SESSION['products']) == 0 ||
  !isset($_SESSION['userId']) ||
- $_SERVER['REQUEST_METHOD'] != 'GET') {
+ $_SERVER['REQUEST_METHOD'] != 'GET' ||
+ $_GET['csrf_token'] != $_SESSION['csrf_token']) {
     header('Location: ../index.php');
     exit();
  }

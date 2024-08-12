@@ -7,12 +7,12 @@ $errorMessage = '';
 if (!empty($_POST)) {
     // add security
     include "./conn/openDb.php";
-    $_SESSION['firstname'] = $_POST['firstname'];
-    $_SESSION['lastname'] = $_POST['lastname'];
-    $_SESSION['username'] = $_POST['username'];
+    $_SESSION['firstname'] = htmlspecialchars(trim($_POST['firstname']));
+    $_SESSION['lastname'] = htmlspecialchars(trim($_POST['lastname']));
+    $_SESSION['username'] = htmlspecialchars(trim($_POST['username']));
     // users are not admin by default. Admins manually turned on.
     $_SESSION['isAdmin'] = false;
-    $password = $_POST['password'];
+    $password = htmlspecialchars(trim($_POST['password']));
 
     if (!empty($_SESSION['firstname']) && !empty($_SESSION['lastname']) && !empty($_SESSION['username']) && !empty($password)) {
         try {
@@ -28,8 +28,14 @@ if (!empty($_POST)) {
 
             $_SESSION['loggedIn'] = true;
             $_SESSION['userId'] = $res['UserId'];
+
             // should be an empty array
             $_SESSION['products'] = json_decode($res['Products']);
+
+            // create session token
+            $csrfToken = bin2hex(random_bytes(32));
+            $_SESSION['csrf_token'] == $csrfToken;
+            
             //redirect to home screen
             header('Location:index.php');
             exit();

@@ -25,7 +25,7 @@ if (!isset($_SESSION['loggedIn'])) {
             <p style="text-align:center; margin-top: 1rem;">Take a look at our products. Lots and lots of Gizzmos to view
             </p>
         <?php else : ?>
-            <p style="text-align:center; margin-top: 1rem;">Take a look around <?= $_SESSION['firstname'] ?>! We're glad
+            <p style="text-align:center; margin-top: 1rem;">Take a look around <?= htmlspecialchars($_SESSION['firstname']) ?>! We're glad
                 your here</p>
         <?php endif; ?>
     </main>

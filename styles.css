@@ -493,6 +493,7 @@ button:hover {
 /* cart.php */
 .cart-grid {
   display: grid;
+  width: fit-content;
   grid-auto-flow: row;
   grid-auto-columns: minmax(300px, 800px);
   grid-auto-rows: 300px;

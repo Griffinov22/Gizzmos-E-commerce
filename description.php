@@ -1,17 +1,17 @@
 <?php
 require_once './models/product.php';
 session_start();
+include './conn/openDb.php';
+include './logic/EchoImage.php';
 
-if (empty($_GET) || !isset($_GET['prodId'])) {
+if (empty($_GET) ||
+ !isset($_GET['prodId']) ||
+  !$_SESSION['loggedIn'] || !is_numeric($_GET['prodId'])) {
     header('Location: ./products.php');
     exit();
 }
 
-include './conn/openDb.php';
-include './logic/EchoImage.php';
-
 $prodId = $_GET['prodId'];
-
 $prodQuery = $db->prepare("SELECT Products.Name,Products.ImageId,Products.Description,Products.Price,Images.Path FROM Products LEFT JOIN Images ON Products.ImageId = Images.ImageId WHERE Products.ProductId = ?");
 
 $prodQuery->execute([$prodId]);
@@ -36,13 +36,13 @@ foreach ($_SESSION['products'] as $products) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Description - <?= $prod['Name'] ?></title>
+    <title>Description - <?= htmlentities($prod['Name']) ?></title>
 </head>
 <body>
 <?php include "./components/header.php" ?>
     <div class="prodcard">
         <div class="prodcard__content">
-            <h1 class="prodcard__title"><?= $prod['Name'] ?></h1>
+            <h1 class="prodcard__title"><?= htmlentities($prod['Name']) ?></h1>
                 <?php if ($inCart): ?>
                     <div>
                         <p class="incart-txt">This item is already in your cart
@@ -50,8 +50,8 @@ foreach ($_SESSION['products'] as $products) {
                         </p>
                     </div>
                         <?php endif; ?>
-                        <p class="prodcard__desc"><?= $prod['Description'] ?? '<i>no description was added</i>' ?></p>
-                        <p class="prodcard__price">$<?= $prod['Price'] ?></p>
+                        <p class="prodcard__desc"><?= htmlentities($prod['Description']) ?? '<i>no description was added</i>' ?></p>
+                        <p class="prodcard__price">$<?= htmlentities($prod['Price']) ?></p>
                         <div class="prodcard__amount-wrapper">
                             <p>Amount:</p>
                             <select id="amount" <?= $inCart ? 'disabled title="go to your cart to edit"' : '' ?>>
@@ -62,10 +62,9 @@ foreach ($_SESSION['products'] as $products) {
                         <option value="5">5</option>
                     </select>
                 </div>
-                <a href="./logic/addToCart.php?productId=<?= $_GET['prodId'] ?>&amount=1" class="prodcard__cartbtn">Add To Cart</a>    
+                <a href="./logic/addToCart.php?productId=<?= htmlentities($_GET['prodId']) ?>&amount=1&csrf_token=<?= $_SESSION['csrf_token'] ?>" class="prodcard__cartbtn">Add To Cart</a>    
         </div>
-
-        <img class="prodcard__img" src="<?= $imageExists ? EchoImage($prod['Path']) : './images/default-image.jpg' ?>" alt="<?= $prod['Name'] ?>" />
+            <img class="prodcard__img" src="<?= $imageExists ? EchoImage(htmlentities($prod['Path'])) : './images/default-image.jpg' ?>" alt="<?= htmlentities($prod['Name']) ?>" />
     </div>
 
     <script type="text/javascript">
@@ -74,18 +73,17 @@ foreach ($_SESSION['products'] as $products) {
 
         const urlBase = new URL(cartBtn.href);
         const params = new URLSearchParams(urlBase.search);
+        const csrfToken = '<?= $_SESSION['csrf_token'] ?>';
 
-        const prodId = <?= $_GET['prodId'] ?>;
-
-        console.log(urlBase.toString());
+        const prodId = <?= htmlentities($_GET['prodId']) ?>;
 
         amtSelect.addEventListener('change', (e) => {
             params.set('productId', prodId);
             params.set('amount', e.target.value);
+            params.set('csrf_token', csrfToken);
 
             const url = urlBase.origin + urlBase.pathname + "?" + params;
             cartBtn.href = url;
-            console.log(url);
         })
 
     </script>
