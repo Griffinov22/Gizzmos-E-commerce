@@ -32,11 +32,11 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Cart - <?= $_SESSION['username'] ?></title>
+    <title>Cart - <?= htmlspecialchars($_SESSION['username']) ?></title>
 </head>
 <body>
 <?php include "./components/header.php" ?>
-    <h1 class="main-header"><?= $_SESSION['username'] ?>'s Cart</h1>
+    <h1 class="main-header"><?= htmlspecialchars($_SESSION['username']) ?>'s Cart</h1>
 
     <?php if (!$cartEmpty): ?>
         <div class="cart-grid">
@@ -61,12 +61,12 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
                     <img src="<?= $imageExists ? EchoImage($prod['Path']) : './images/default-image.jpg' ?>" alt="<?= $prod['Name'] ?>" />
 
                     <div class="cart-grid__item-content">
-                        <h2><?= $prod['Name'] ?></h2>
-                        <p><?= $prod['Description'] ?></p>
+                        <h2><?= htmlspecialchars($prod['Name']) ?></h2>
+                        <p><?= htmlspecialchars($prod['Description']) ?></p>
                         <div class="cart-grid__item-flex">
                             <div>
                                 <p>Amount:</p>
-                                <select data-iniAmount="<?= $prodAmount ?>" data-prodId="<?= $prod['ProductId'] ?>" class="cart-select">
+                                <select data-iniAmount="<?= $prodAmount ?>" data-prodId="<?= htmlspecialchars($prod['ProductId']) ?>" class="cart-select">
                                     <?php 
                                 for ($i=1; $i<6; $i++): 
                                     $isSelected = $prodAmount == $i
@@ -76,9 +76,9 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
                                 </select>
                             </div>
                                 
-                            <p class="cart-grid__item-price">$<?= $prod['Price'] ?></p>
+                            <p class="cart-grid__item-price">$<?= htmlspecialchars($prod['Price']) ?></p>
                         </div>
-                        <button class="cart-grid__item-deletebtn" data-prodId="<?= $prod['ProductId'] ?>" title="remove item from cart">
+                        <button class="cart-grid__item-deletebtn" data-prodId="<?= htmlspecialchars($prod['ProductId']) ?>" title="remove item from cart">
                         <svg id="Icons" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm4.707,14.293a1,1,0,1,1-1.414,1.414L12,13.414,8.707,16.707a1,1,0,1,1-1.414-1.414L10.586,12,7.293,8.707A1,1,0,1,1,8.707,7.293L12,10.586l3.293-3.293a1,1,0,1,1,1.414,1.414L13.414,12Z"/></svg>
                         </button>
                     </div>

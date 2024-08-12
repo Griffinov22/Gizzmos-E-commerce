@@ -8,8 +8,8 @@ $errorMessage = '';
 if (!empty($_POST)) {
 
     include "./conn/openDb.php";
-    $_SESSION['username'] = $_POST['username'];
-    $password = $_POST['password'];
+    $_SESSION['username'] = htmlspecialchars(trim($_POST['username']));
+    $password = htmlspecialchars(trim($_POST['password']));
 
     if (!empty($_SESSION['username']) && !empty($password)) {
         try {
@@ -19,10 +19,10 @@ if (!empty($_POST)) {
 
             if (password_verify($password, $res["Password"])) {
                 $_SESSION['loggedIn'] = true;
-                $_SESSION['firstname'] = $res['Firstname'];
-                $_SESSION['lastname'] = $res['Lastname'];
+                $_SESSION['firstname'] = htmlspecialchars(trim($res['Firstname']));
+                $_SESSION['lastname'] = htmlspecialchars(trim($res['Lastname']));
                 $_SESSION['isAdmin'] = (bool)$res['IsAdmin'];
-                $_SESSION['userId'] = $res['UserId'];
+                $_SESSION['userId'] = htmlspecialchars(trim($res['UserId']));
                 $_SESSION['products'] = [];
 
                 $decodedProducts = json_decode($res['Products']);
