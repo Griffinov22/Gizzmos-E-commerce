@@ -1,2 +1,4 @@
 .vscode/*
-conn/openDb.php
+
+vender/*
+.env
