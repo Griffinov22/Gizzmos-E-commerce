@@ -28,8 +28,14 @@ if (!empty($_POST)) {
 
             $_SESSION['loggedIn'] = true;
             $_SESSION['userId'] = $res['UserId'];
+
             // should be an empty array
             $_SESSION['products'] = json_decode($res['Products']);
+
+            // create session token
+            $csrfToken = bin2hex(random_bytes(32));
+            $_SESSION['csrf_token'] == $csrfToken;
+            
             //redirect to home screen
             header('Location:index.php');
             exit();

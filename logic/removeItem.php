@@ -11,7 +11,8 @@ if (empty($postData) ||
     !isset($_SESSION['loggedIn']) ||
     !isset($_SESSION['userId']) ||
     !isset($_SESSION['products']) ||
-    !is_numeric($postData['productId'])) {
+    !is_numeric($postData['productId']) ||
+    $postData['csrf_token'] != $_SESSION['csrf_token']) {
     echo json_encode(['error' => true, 'reason' => 'arguments invalid']);
 }
 

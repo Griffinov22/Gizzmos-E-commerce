@@ -62,10 +62,8 @@ foreach ($_SESSION['products'] as $products) {
                         <option value="5">5</option>
                     </select>
                 </div>
-                <a href="./logic/addToCart.php?productId=<?= htmlentities($_GET['prodId']) ?>&amount=1" class="prodcard__cartbtn">Add To Cart</a>    
+                <a href="./logic/addToCart.php?productId=<?= htmlentities($_GET['prodId']) ?>&amount=1&csrf_token=<?= $_SESSION['csrf_token'] ?>" class="prodcard__cartbtn">Add To Cart</a>    
         </div>
-
-            console.log(url);
             <img class="prodcard__img" src="<?= $imageExists ? EchoImage(htmlentities($prod['Path'])) : './images/default-image.jpg' ?>" alt="<?= htmlentities($prod['Name']) ?>" />
     </div>
 
@@ -75,12 +73,14 @@ foreach ($_SESSION['products'] as $products) {
 
         const urlBase = new URL(cartBtn.href);
         const params = new URLSearchParams(urlBase.search);
+        const csrfToken = '<?= $_SESSION['csrf_token'] ?>';
 
         const prodId = <?= htmlentities($_GET['prodId']) ?>;
 
         amtSelect.addEventListener('change', (e) => {
             params.set('productId', prodId);
             params.set('amount', e.target.value);
+            params.set('csrf_token', csrfToken);
 
             const url = urlBase.origin + urlBase.pathname + "?" + params;
             cartBtn.href = url;

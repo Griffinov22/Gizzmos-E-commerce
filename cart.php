@@ -7,6 +7,11 @@ if (!$_SESSION['loggedIn']) {
     exit();
 }
 
+if (!isset($_SESSION['csrf_token'])) {
+    header('Location: index.php');
+    exit();
+}
+
 include './conn/openDb.php';
 include './logic/EchoImage.php';
 
@@ -88,7 +93,7 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
 
         <div class="checkout-wrapper">
             <h3 class="text-center">Ready to checkout?</h3>
-            <a href="./logic/clearCart.php" class="checkout__btn text-center">
+            <a href="./logic/clearCart.php?csrf_token=<?= $_SESSION['csrf_token'] ?>" class="checkout__btn text-center">
                 <p>Checkout</p>
                 <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><rect fill="none" height="256" width="256"/><path d="M223.9,65.4l-12.2,66.9A24,24,0,0,1,188.1,152H72.1l4.4,24H184a24,24,0,1,1-24,24,23.6,23.6,0,0,1,1.4-8H102.6a23.6,23.6,0,0,1,1.4,8,24,24,0,1,1-42.2-15.6L34.1,32H16a8,8,0,0,1,0-16H34.1A16,16,0,0,1,49.8,29.1L54.7,56H216a7.9,7.9,0,0,1,6.1,2.9A7.7,7.7,0,0,1,223.9,65.4Z"/></svg>
             </a>
@@ -110,6 +115,7 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
             el.addEventListener('change', (e) => {
                 const targetAmount = parseInt(e.currentTarget.value);
                 const productId = parseInt(e.currentTarget.dataset['prodid']);
+                const csrfToken = '<?= $_SESSION['csrf_token'] ?>';
                 // const startAmount = e.target.dataset['iniamount'];
                 if (isNaN(targetAmount) || isNaN(productId)) return;
 
@@ -120,7 +126,8 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
                     },
                     body: JSON.stringify({
                         targetAmount,
-                        productId
+                        productId,
+                        'csrf_token': csrfToken
                     })
                 })
                 .then(res => {
@@ -141,6 +148,7 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
         deleteBtn.forEach(el => {
             el.addEventListener('click', (e) => {
                 const productId = parseInt(e.currentTarget.dataset['prodid']);
+                const csrfToken = '<?= $_SESSION['csrf_token'] ?>';
                 if (isNaN(productId)) return;
 
                 fetch('/logic/removeItem.php', {
@@ -149,7 +157,8 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        productId
+                        productId,
+                        "csrf_token": csrfToken
                     })
                 })
                 .then(res => {

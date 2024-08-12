@@ -25,6 +25,10 @@ if (!empty($_POST)) {
                 $_SESSION['userId'] = htmlspecialchars(trim($res['UserId']));
                 $_SESSION['products'] = [];
 
+                // create session token
+                $csrfToken = bin2hex(random_bytes(32));
+                $_SESSION['csrf_token'] = $csrfToken;
+
                 $decodedProducts = json_decode($res['Products']);
                 foreach($decodedProducts as $prod) {
                     $prodClass = unserialize($prod);

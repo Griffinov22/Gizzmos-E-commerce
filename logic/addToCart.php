@@ -2,7 +2,13 @@
 require_once '../models/product.php';
 session_start();
 
-if (empty($_GET) || !isset($_GET['productId']) || !isset($_GET['amount']) || !isset($_SESSION['products']) || !isset($_SESSION['userId']) || !isset($_SESSION['loggedIn'])) {
+if (empty($_GET) ||
+ !isset($_GET['productId']) ||
+ !isset($_GET['amount']) ||
+ !isset($_SESSION['products']) ||
+ !isset($_SESSION['userId']) ||
+ !isset($_SESSION['loggedIn']) ||
+ $_GET['csrf_token'] != $_SESSION['csrf_token']) {
     header('Location: ../index.php');
     exit();
 }
