@@ -137,8 +137,10 @@ $cartEmpty = sizeof($_SESSION['products']) == 0;
                     return res.json();
                 })
                 .then(data => {
-                    if (data.success) {
+                    if ('success' in data) {
                         location.reload();
+                    } else {
+                        console.log(data);
                     }
                 })
 
