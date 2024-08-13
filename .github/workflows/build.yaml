@@ -16,11 +16,18 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      
+      - name: Set up SSH
+        run: |
+          chmod 700 ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Update repository to use SSH
+        run: |
+          cd /var/www/Gizzmos
+          git remote set-url origin git@github.com:Griffinov22/Gizzmos-E-commerce.git
+
       - name: Pull latest changes from main branch
         run: |
           cd /var/www/Gizzmos
-          git reset --hard
           git pull origin main
