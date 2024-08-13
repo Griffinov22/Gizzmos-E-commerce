@@ -23,10 +23,6 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
           chmod 600 ~/.ssh/id_ed25519
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_ed25519
-          # Create a temporary SSH config file for this session
-          echo -e "Host github.com\n\tPort 443\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-          chmod 644 ~/.ssh/config
 
       - name: Update repository to use SSH
         run: |
