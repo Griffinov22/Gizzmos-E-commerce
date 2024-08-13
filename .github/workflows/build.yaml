@@ -18,7 +18,6 @@ jobs:
     steps:
       - name: Set up SSH
         run: |
-          chmod 700 ~/.ssh
           # Assuming gizzmos-key is stored at ~/.ssh/gizzmos-key
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
