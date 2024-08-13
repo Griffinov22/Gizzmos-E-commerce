@@ -17,10 +17,10 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       
       - name: Navigate to project directory
-        run: cd /var/www/myproject
+        run: cd /var/www/Gizzmos
       
       - name: Pull latest changes from main branch
         run: git pull origin main
