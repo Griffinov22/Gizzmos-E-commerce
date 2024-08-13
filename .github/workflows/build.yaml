@@ -25,4 +25,4 @@ jobs:
     - name: Deploy New Gizzmo Release
       run: |
           cd /var/www/Gizzmos/
-          git pull origin main
+          git pull https://github.com/Griffinov22/Gizzmos-E-commerce.git main
