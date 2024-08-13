@@ -19,8 +19,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Navigate to project directory
-        run: cd /var/www/Gizzmos
-      
       - name: Pull latest changes from main branch
-        run: git pull origin main
+        run: |
+          cd /var/www/myproject
+          git reset --hard
+          git pull origin main
