@@ -24,6 +24,9 @@ jobs:
           chmod 600 ~/.ssh/gizzmo-key
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/gizzmo-key
+          # Create a temporary SSH config file for this session
+          echo -e "Host github.com\n\tPort 443\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+          chmod 644 ~/.ssh/config
 
       - name: Update repository to use SSH
         run: |
