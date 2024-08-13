@@ -18,12 +18,12 @@ jobs:
     steps:
       - name: Set up SSH
         run: |
-          # Assuming gizzmo-key is stored at ~/.ssh/gizzmo-key
+          # Assuming gizzmo-key is stored at ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/gizzmo-key
+          chmod 600 ~/.ssh/id_ed25519
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/gizzmo-key
+          ssh-add ~/.ssh/id_ed25519
           # Create a temporary SSH config file for this session
           echo -e "Host github.com\n\tPort 443\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
           chmod 644 ~/.ssh/config
