@@ -21,6 +21,6 @@ jobs:
       
       - name: Pull latest changes from main branch
         run: |
-          cd /var/www/myproject
+          cd /var/www/Gizzmos
           git reset --hard
           git pull origin main
