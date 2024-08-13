@@ -18,14 +18,14 @@ jobs:
     steps:
       - name: Set up SSH
         run: |
-          # Assuming gizzmos-key is stored at ~/.ssh/gizzmos-key
+          # Assuming gizzmo-key is stored at ~/.ssh/gizzmo-key
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
           # Set up the SSH key
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/gizzmos-key
-          chmod 600 ~/.ssh/gizzmos-key
+          chmod 600 ~/.ssh/gizzmo-key
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/gizzmos-key
+          ssh-add ~/.ssh/gizzmo-key
 
       - name: Update repository to use SSH
         run: |
